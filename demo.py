@@ -19,7 +19,7 @@ def build_dataset():
     return dataset
 
 
-def buildmodel():
+def build_model():
     inputs = keras.layers.Input(shape=[784, ])
     x = keras.layers.Dense(256, activation='relu')(inputs)
     x = keras.layers.Dense(64, activation='relu')(x)
@@ -42,7 +42,7 @@ def evaluate():
     print(np.mean(y_pred == y_test))
 
 opt = tf.keras.optimizers.Adam()
-model = buildmodel()
+model = build_model()
 dataset = build_dataset()
 
 
