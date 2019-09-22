@@ -19,7 +19,7 @@ def build_dataset():
     return dataset
 
 
-def build_model():
+def build_model():#simple model
     inputs = keras.layers.Input(shape=[784, ])
     x = keras.layers.Dense(256, activation='relu')(inputs)
     x = keras.layers.Dense(64, activation='relu')(x)
@@ -59,11 +59,13 @@ def train():
         acc = compute_acc(y_true, y_pred)
         if tf.equal(step % 20, 0):
             tf.print('step:', step, 'loss:', loss, 'acc:', acc)
+            #print('step:', step, 'loss:', loss.numpy(), 'acc:', acc.numpy())
         if tf.equal(step,2000):
             break
-    model.save('keras_model.h5')
+    #model.save('keras_model.h5') #problem here??
 
 
 train()
+model.save('keras_model.h5')
 evaluate()
 
