@@ -7,7 +7,7 @@ from tensorflow.keras import layers, Model
 import matplotlib.pyplot as plt
 
 
-def build_model():  # ResNet50
+def build_model():  # ResNet50 with sigmoid output
     def conv_bn_relu(inputs, filters, kernel_size, strides, padding, bn=True, act='relu'):
         x = layers.Conv2D(filters, kernel_size=kernel_size, strides=strides, padding=padding)(inputs)
         if bn:
@@ -186,7 +186,6 @@ if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument('-a', '--dira', help='images directory for class a', required=True)
     parser.add_argument('-b', '--dirb', help='images directory for class b', required=True)
-    parser.add_argument('-vs', '--validate_steps', default=20)
     parser.add_argument('-bs', '--batch_size', default=32)
     parser.add_argument('-s', '--steps', default=2000)
     args = parser.parse_args()
