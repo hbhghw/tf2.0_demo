@@ -1,3 +1,4 @@
+#version : tf-2.0.0beta1
 import os, cv2
 import numpy as np
 import tensorflow as tf
@@ -83,14 +84,14 @@ def create_dataset(image_files, labels, flag='train'):
 
 
 def readData(dir_a, dir_b, train_val_rate=0.7):
-    image_files = []  # class 0
+    image_files = [] 
     labels = []
-    for normal_file in os.listdir(dir_a):
-        image_files.append(os.path.join(dir_a, normal_file))
+    for file in os.listdir(dir_a):
+        image_files.append(os.path.join(dir_a, file))
         labels.append(0)
 
-    for pro_file in os.listdir(dir_b):
-        image_files.append(os.path.join(dir_b, pro_file))
+    for file in os.listdir(dir_b):
+        image_files.append(os.path.join(dir_b, file))
         labels.append(1)
 
     assert len(image_files) == len(labels)
@@ -155,15 +156,15 @@ def train(args):
         if len(history) >= 5:
             stop = True
             for h in history[-5:]:
-                if h < 0.95:
+                if h < 0.90:
                     stop = False
                     break
         if stop or step == args.steps:
             model.save('models/model.h5')
             break
 
-    plt.plot([i for i in range(len(history))], history)
-    plt.show()
+#     plt.plot([i for i in range(len(history))], history)
+#     plt.show()
 
 
 def evaluate(model_path, imgs_path):
@@ -181,7 +182,7 @@ def evaluate(model_path, imgs_path):
         img = cv2.resize(img, (224, 224)) / 255.  # range [0,1]
         img = img * 2 - 1  # range [-1,1]
         pred = model.predict(np.expand_dims(img, axis=0))
-        results.append(0 if pred < 0.5 else 1)  # 0 or 1
+        results.append(0 if pred < 0 else 1)  # 0 or 1
 
     print(sum(results) / len(results))
 
@@ -190,9 +191,8 @@ if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument('-a', '--dira', help='images directory for class a', required=True)
     parser.add_argument('-b', '--dirb', help='images directory for class b', required=True)
-    parser.add_argument('-vs', '--validate_steps', default=20)
     parser.add_argument('-bs', '--batch_size', default=32)
     parser.add_argument('-s', '--steps', default=2000)
     args = parser.parse_args()
     train(args)
-    # evaluate('models/model1.h5', 'DATA/select/normal')
+    # evaluate('models/model.h5', 'DATA/select/normal')
